@@ -49,7 +49,7 @@
         chdir: /opt/build/boxfuse-sample-java-war-hello
     - name: Fetch build
       fetch:
-        src: /root/dz/boxfuse-sample-java-war-hello/target/hello-1.0.war
+        src: /opt/build/boxfuse-sample-java-war-hello/target/hello-1.0.war
         dest: /tmp/hello-1.0.war
         flat: yes
 
