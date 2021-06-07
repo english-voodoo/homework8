@@ -7,7 +7,7 @@
       apt:
         name: nginx
         state: latest
-- name: long form task does not
+- name: replace line
   replace:
     path: /var/www/html/index.nginx-debian.html
     regexp: '\<h1\>Welcome to nginx!\<\/h1\>'
