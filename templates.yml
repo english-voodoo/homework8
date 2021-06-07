@@ -3,7 +3,7 @@
   hosts: all
   become: yes
   
-  var:
+  vars:
     source_folder: ./
     dest_folder: /var/www/html
 
@@ -14,3 +14,9 @@
         state: latest
     - name: templ
       template: src={{ source_folder }}/index.j2 dest={{ dest_folder }}/index.html mode=0555
+      notify:
+        - restart nginx
+    
+  handlers:
+    - name: restart nginx
+      service: name=nginx state=restarted
