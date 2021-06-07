@@ -1,0 +1,54 @@
+---
+- name: install software
+  hosts: db
+  become: yes
+
+  tasks:
+    - name: Ensure java is present
+      apt:
+        name: default-jdk
+        state: present
+    - name: Ensure git is present
+      apt:
+        name: git
+        state: present
+    - name: Ensure maven is present
+      apt:
+        name: maven
+        state: present
+    - name: Create a directory if it does not exist
+      file:
+        path: /root/dz
+        state: directory
+        mode: '0755'
+    - name: Git boxfuse repository is cloned
+      git:
+        repo: https://github.com/boxfuse/boxfuse-sample-java-war-hello.git
+        dest: /root/dz/boxfuse-sample-java-war-hello
+    - name: Running mvn clean
+      shell: "mvn -f /root/dz/boxfuse-sample-java-war-hello/pom.xml package"
+    - name: Fetch build
+      fetch:
+        src: /root/dz/boxfuse-sample-java-war-hello/target/hello-1.0.war
+        dest: /tmp/hello-1.0.war
+        flat: yes
+
+- name: install software
+  hosts: web
+  become: yes
+
+  tasks:
+  - name: Ensure tomcat package is present
+    apt:
+      name: tomcat9
+      state: present
+
+  - name: Ensure tomcat service is started
+    service:
+      name: tomcat9
+      state: started
+
+  - name: Copy build
+    copy:
+      src: /tmp/hello-1.0.war
+      dest: /var/lib/tomcat9/webapps/
